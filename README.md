@@ -1,43 +1,27 @@
-# INFO
-This code just makes your party pokemon to be shown in tm case , only for FIRE RED BINARY.
+# Info
+This repository uses the [Complete FireRed Upgrade](https://github.com/Skeli789/Complete-Fire-Red-Upgrade) build system to dynamically insert songs into your `BPRE0.gba` ROM.
+Thanks to Shiny Miner for his [porting template](https://github.com/Shiny-Miner/Porting-template) on which this repository is based on.
 
-## Build Instructions
+## Prerequisites
+- devKitPro, or more specifically, devKitARM, which can be downloaded here: [Download](https://github.com/devkitPro/installer/releases). Install the program in `C:\`
+- [Python 3.7.6](https://www.python.org/downloads/release/python-376/)
+- Detailed instructions are provided in Skeli's original CFRU repository (link above).
 
-Build the same as the CFRU:  `python scripts/make.py`
+## Configuration and Build
+- Put your desired `.mid` file in `audio/songs`
+- Create a `.txt` file with the same name as your midi in the same folder, with `_flags` at the end of the name. For example, if my `.mid` file is `pallet_town.mid`, my `.txt` file would be `pallet_town_flags.txt`.
+- Paste this in your `.txt` file: `-V XXX -G 0xYYYYYYY`. Replace `XXX` with the desired volume (generally 127). Replace `YYYYYYY` with your voicegroup offset. An example for my `.mid`: `-V 127 -G 0x8B30C5C`. The offset I used is the voicegroup offset of the [All Instruments Patch for FireRed](https://www.pokecommunity.com/threads/all-instrument-patch-firered-ruby-emerald.332272/).
+- Open `songs` in the root folder and add entries in this format: `songid_to_replace midi_filename`. For example: `300 pallet_town`
+- Rename your ROM `BPRE0.gba` and paste it on the root folder.
+- Run `python scripts//make.py` to generate the required `test.gba` file. If you need to change the song/edit the voicegroup, etc. simply run `python scripts//clean.py all` and then recompile using the `make.py` command mentioned earlier. No need to worry about repointing!
+- An example `.mid` file and required edits have been provided to help with insertion. Just follow the same steps!
 
-Alternatively, you can download the code as a .zip file from the arrow above.  You can navigate to whichever branch for whichever feature you would like to check out as well.
-
-### Adding your ROM
-
-Copy your ROM to this directory and rename it `BPRE0.gba`.
-
-#### Configuration
-
-##### Compile Time Constants
-
-Open [scripts/make.py](https://github.com/BluRosie/firegold-code/blob/template/scripts/make.py#L12) in a text editor to set some compile-time configuration.
-
-The build system is smart enough to find enough free space on its own, and if you want it to be inserted at a particular address, you can specify it by updating the definition of `OFFSET_TO_PUT`:
-
-```python
-OFFSET_TO_PUT = 0x1C88650
-SEARCH_FREE_SPACE = True   # Set to True if you want the script to search for free space
-                           # Set to False if you don't want to search for free space as you for example update the engine
-```
-
-The build system will use `OFFSET_TO_PUT` to determine where in the ROM it should start looking for free space if `SEARCH_FREE_SPACE` is `True`.  Otherwise, the build system places the code to insert directly at `OFFSET_TO_PUT`.
-
-#### Building the project itself
-
-Once you're ready, run:
-
-```shell
-$ python scripts/make.py
-```
-
-This won't actually modify `BPRE0.gba`, instead your output will be in `test.gba`. Naturally, test it in an emulator before continuing.
+## Additional Info
+- In `scripts/make.py` and `scripts/insert.py`, you'll see an `OFFSET_TO_PUT` variable at the top of the file. Modify that to change where the songs would be inserted.
+- Additionally, set `SEARCH_FREE_SPACE` in `make.py` to `False` if do not want the repo to search for free space while inserting the songs. Though, it is better to keep that option as `True`.
 
 ### Credits
 
-Blurose for this template he took out from CFRU and Greenphx for his awesome code
-Skeli made the [build system used in the CFRU](https://github.com/Skeli789/Complete-Fire-Red-Upgrade) which is used here.
+- Blurose for this template he took out from CFRU and Greenphx for his code.
+- Skeli made the [build system used in the CFRU](https://github.com/Skeli789/Complete-Fire-Red-Upgrade) which is used here.
+- Shiny Miner for the actual porting template on which this repository is based on.
