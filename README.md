@@ -5,7 +5,7 @@ Thanks to Shiny Miner for his [porting template](https://github.com/Shiny-Miner/
 ## Prerequisites
 - devKitPro, or more specifically, devKitARM, which can be downloaded here: [Download](https://github.com/devkitPro/installer/releases). Install the program in `C:\`
 - [Python 3.7.6](https://www.python.org/downloads/release/python-376/)
-- Detailed instructions are provided in Skeli's original CFRU repository (link above).
+- Detailed instructions are provided in Skeli's original CFRU repository (link in INFO section above).
 
 ## Configuration and Build
 - Put your desired `.mid` file in `audio/songs`
