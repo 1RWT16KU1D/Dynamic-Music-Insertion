@@ -24,5 +24,6 @@ Thanks to Shiny Miner for his [porting template](https://github.com/Shiny-Miner/
 ### Credits
 
 - Blurose for this template he took out from CFRU and Greenphx for his code.
-- Skeli made the [build system used in the CFRU](https://github.com/Skeli789/Complete-Fire-Red-Upgrade) which is used here.
+- Skeli made the [build system used in the CFRU](https://github.com/Skeli789/Complete-Fire-Red-Upgrade) which is used here. I did NOT make any of the build system and just made it simpler for the majority to use it.
 - Shiny Miner for the actual porting template on which this repository is based on.
+- Invis for the sample midi file and helping me out with the music sampling!
