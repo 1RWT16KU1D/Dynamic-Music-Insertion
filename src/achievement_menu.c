@@ -46,10 +46,35 @@ static void CleanWindow(u8 windowId);
 static void CleanWindows(void);
 static void CommitWindows(void);
 static void PrintGUIAchievementsItems(void);
+static void CreateAchievementMenuTrophySprite(void);
+static void DestroyAchievementMenuTrophySprite(void);
 
 
 // Defer copies: do 2 VBlanks per window to catch async printers finishing early
 static u8 sWinNeedsCopy[WIN_MAX_COUNT];
+
+static u8 sTrophySpriteId = MAX_SPRITES;
+
+
+static const struct OamData sTrophyOamData =
+{
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .shape = SPRITE_SHAPE(32x32),
+    .size = SPRITE_SIZE(32x32),
+    .priority = 1,
+};
+
+static const struct SpriteTemplate sTrophySpriteTemplate =
+{
+    .tileTag = TROPHY_SPRITE_TAG,
+    .paletteTag = TROPHY_SPRITE_PAL_TAG,
+    .oam = &sTrophyOamData,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
 
 
 static void RequestWindowCopy(u8 windowId)
@@ -208,6 +233,40 @@ static void DisplayAchievementsBG(void)
     Menu_LoadStdPalAt(15 * 0x10);
 }
 
+static void CreateAchievementMenuTrophySprite(void)
+{
+    if (sTrophySpriteId != MAX_SPRITES)
+        return;
+
+    // Load sprite graphics
+    struct CompressedSpriteSheet sheet = {TrophyTiles, 512, TROPHY_SPRITE_TAG};
+    struct SpritePalette palette = {TrophyPal, TROPHY_SPRITE_PAL_TAG};
+
+    LoadCompressedSpriteSheet(&sheet);
+    LoadSpritePalette(&palette);
+
+    sTrophySpriteId = CreateSprite(&sTrophySpriteTemplate, TROPHY_COORD_X, TROPHY_COORD_Y, 0);
+
+    if (sTrophySpriteId >= MAX_SPRITES)
+    {
+        FreeSpriteTilesByTag(TROPHY_SPRITE_TAG);
+        FreeSpritePaletteByTag(TROPHY_SPRITE_PAL_TAG);
+        sTrophySpriteId = MAX_SPRITES;
+    }
+}
+
+static void DestroyAchievementMenuTrophySprite(void)
+{
+    if (sTrophySpriteId < MAX_SPRITES)
+    {
+        DestroySprite(&gSprites[sTrophySpriteId]);
+        sTrophySpriteId = MAX_SPRITES;
+    }
+
+    FreeSpriteTilesByTag(TROPHY_SPRITE_TAG);
+    FreeSpritePaletteByTag(TROPHY_SPRITE_PAL_TAG);
+}
+
 static void PrintGUIAchievementsHeader(void)
 {
     const u8* text = gText_AchievementMenuHeader;
@@ -357,6 +416,7 @@ static void Task_AlbumFadeOut(u8 taskId)
 {
     if (!gPaletteFade->active)
     {
+        DestroyAchievementMenuTrophySprite();
         SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
         Free(sAchievementMenuPtr->bgMap);
         Free(sAchievementMenuPtr);
@@ -517,6 +577,7 @@ static void CB2_AchievementMenu(void)
             for (u8 i = 0; i < WIN_MAX_COUNT; i++)
                 sWinNeedsCopy[i] = 0;
 
+            CreateAchievementMenuTrophySprite();
             InitAchievementMenu();
             CreateTask(Task_AlbumFadeIn, 0);
             SetMainCallback2(MainCB2_AchievementMenu);

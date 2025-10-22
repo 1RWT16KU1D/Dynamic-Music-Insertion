@@ -13,6 +13,12 @@
 #define VAR_ALBUM_SELECTED_MEMORY 0x5101
 #define VAR_ALBUM_NORMAL_DISPLAYED_START_ID 0x5102
 
+// Trophy Image Data
+#define TROPHY_SPRITE_TAG 0x4000
+#define TROPHY_SPRITE_PAL_TAG 0x4000
+#define TROPHY_COORD_X 205
+#define TROPHY_COORD_Y 95
+
 // Flags
 #define FLAG_SYS_DEXNAV 0x91E
 #define FLAG_ACHIEVEMENT_MENU_SE_DONE 0x15FE
@@ -83,7 +89,6 @@ extern const u8 AchievementsBGMap[];
 extern const u16 AchievementsBGPal[];
 
 extern const u8 TrophyTiles[];
-extern const u8 TrophyMap[];
 extern const u16 TrophyPal[];
 
 /* ============= Text Declarations ============== */
