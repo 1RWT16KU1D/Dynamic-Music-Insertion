@@ -1,4 +1,4 @@
-#ifndef GUARD_BATTLE_2_H
+#ifdef GUARD_BATTLE_2_H
 #define GUARD_BATTLE_2_H
 
 #include "global.h"

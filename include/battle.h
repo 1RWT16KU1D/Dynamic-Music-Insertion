@@ -1085,7 +1085,7 @@ struct NewBattleStruct
 	struct Pokemon** foePartyBackup; //Pointer to dynamically allocated memory
 };
 
-extern struct NewBattleStruct* gNewBS; //0x203E038
+extern struct NewBattleStruct* gNewBS;
 
 struct TrainerSpotted {
     /* NPC state id */

@@ -52,8 +52,8 @@ bool8 IsMaxGuardUp(u8 bank);
 bool8 ProtectedByMaxGuard(u8 bankDef, u16 move);
 void TryFadeBankPaletteForDynamax(u8 bank, u16 paletteOffset);
 
-bool8 IsRaidBattle(void);
-bool8 IsFrontierRaidBattle(void);
+extern bool8 IsRaidBattle(void);
+extern bool8 IsFrontierRaidBattle(void);
 bool8 IsCatchableRaidBattle(void);
 bool8 HasRaidShields(u8 bank);
 u8 GetNumRaidShieldsUp(void);

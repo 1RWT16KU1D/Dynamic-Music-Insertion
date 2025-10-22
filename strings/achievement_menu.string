@@ -1,0 +1,95 @@
+#org @gText_AchievementMenuHeader
+Trophies
+
+#org @gText_AchievementsUnlocked
+Trophies\nUnlocked:
+
+#org @gText_MenuAchievements
+Trophies
+
+#org @gText_MenuDexNav
+DexNav
+
+#org @gText_MenuExitRight
+Exit  [DPAD_RIGHT]
+
+#org @gText_MenuExitLeft
+Exit  [DPAD_LEFT]
+
+#org @gText_DexNavDescription
+Search for wild Pok\emon in the area\nwith potential special qualities!
+
+#org @gText_AchievementMenuDescription
+A collection of all your achievements!
+
+#org @gText_AchievementMenuFlagSet
+Flags set!
+
+
+// Achievement Names
+#org @gText_None
+??????
+
+#org @gText_Achievement_1
+Achievement 1
+
+#org @gText_Achievement_2
+Achievement 2
+
+#org @gText_Achievement_3
+Achievement 3
+
+#org @gText_Achievement_4
+Achievement 4
+
+#org @gText_Achievement_5
+Achievement 5
+
+#org @gText_Achievement_6
+Achievement 6
+
+#org @gText_Achievement_7
+Achievement 7
+
+#org @gText_Achievement_8
+Achievement 8
+
+#org @gText_Achievement_9
+Achievement 9
+
+#org @gText_Achievement_10
+Achievement 10
+
+// Achievement Descriptions
+#org @gText_Desc_None
+Trophy Locked
+
+#org @gText_AchievementDesc_1
+Description 1
+
+#org @gText_AchievementDesc_2
+Description 2
+
+#org @gText_AchievementDesc_3
+Description 3
+
+#org @gText_AchievementDesc_4
+Description 4
+
+#org @gText_AchievementDesc_5
+Description 5
+
+#org @gText_AchievementDesc_6
+Description 6
+
+#org @gText_AchievementDesc_7
+Description 7
+
+#org @gText_AchievementDesc_8
+Description 8
+
+#org @gText_AchievementDesc_9
+Description 9
+
+#org @gText_AchievementDesc_10
+Description 10

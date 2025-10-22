@@ -1,2 +1,8 @@
-##example
-#gMoveDescriptions 080E5440
+sStartMenuActionTable 0806EF9C
+sStartMenuActionTable 0806F374
+sStartMenuActionTable 0806F3F8
+
+sStartMenuDescPointers 0806F138
+sStartMenuDescPointers 0806F368
+sStartMenuDescPointers 0948DBAC
+sStartMenuDescPointers 0948DCA0

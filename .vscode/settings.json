@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "global.h": "c",
+        "battle_strings.h": "c",
+        "dynamax.h": "c",
+        "dns.h": "c",
+        "songs.h": "c",
+        "event_object_movement.h": "c",
+        "field_effect.h": "c",
+        "dexnav.h": "c",
+        "ram_locs.h": "c",
+        "sound.h": "c",
+        "fieldmap.h": "c",
+        "international_string_util.h": "c",
+        "gpu_regs.h": "c",
+        "item_menu.h": "c",
+        "new_menu_helpers.h": "c",
+        "decompress.h": "c",
+        "menu.h": "c",
+        "vanilla_functions.h": "c",
+        "map_name_popup.h": "c"
+    }
+}

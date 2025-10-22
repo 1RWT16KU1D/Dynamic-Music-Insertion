@@ -10,7 +10,7 @@
  */
 
 //Exported Functions
-u8 GetBankForBattleScript(u8 caseId);
+extern u8 GetBankForBattleScript(u8 caseId);
 u8 GetFirstAliveActiveBattler(void);
 ability_t GetBankAbility(u8 bank);
 ability_t GetRecordedAbility(u8 bank);
@@ -81,7 +81,7 @@ u8 GetMoveTarget(u16 move, u8 useMoveTarget);
 u8 GetBaseMoveTarget(u16 move, u8 bankAtk);
 u8 GetBaseMoveTargetByGrounding(u16 move, bool8 atkIsGrounded);
 bool8 IsBattlerAlive(u8 bank);
-struct Pokemon* LoadPartyRange(u8 bank, u8* firstMonId, u8* lastMonId);
+extern struct Pokemon* LoadPartyRange(u8 bank, u8* firstMonId, u8* lastMonId);
 bool8 UproarWakeUpCheck(unusedArg u8 bank);
 bool8 IsUproarBeingMade(void);
 u8 GetIllusionPartyNumber(u8 bank);
