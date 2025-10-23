@@ -10,7 +10,6 @@ EventScript_PalletTown_FatGuy:
     lock
     faceplayer
 
-    setflag 0x91E  @ Set DexNav
     setflag 0x15FF @ Set Achievement Menu
 
     setflag 0x1600 @ Achievement 1

@@ -16,7 +16,7 @@
 // Trophy Image Data
 #define TROPHY_SPRITE_TAG 0x4000
 #define TROPHY_SPRITE_PAL_TAG 0x4000
-#define TROPHY_COORD_X 205
+#define TROPHY_COORD_X 206
 #define TROPHY_COORD_Y 95
 
 // Flags
