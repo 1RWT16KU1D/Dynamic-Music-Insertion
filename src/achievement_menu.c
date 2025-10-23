@@ -49,9 +49,6 @@ static void PrintGUIAchievementsItems(void);
 static void CreateAchievementMenuTrophySprite(void);
 static void DestroyAchievementMenuTrophySprite(void);
 
-// Total Achievement Count
-u8 *achievementCount = 10;
-
 // Defer copies: do 2 VBlanks per window to catch async printers finishing early
 static u8 sWinNeedsCopy[WIN_MAX_COUNT];
 
@@ -199,6 +196,10 @@ static const struct AchievementEntry sAchievementsTable[] =
     {9, gText_Achievement_10, gText_AchievementDesc_10},
 };
 
+// Total Achievement Count
+static u8 sAchievementCountValue = ARRAY_COUNT(sAchievementsTable);
+u8 *achievementCount = &sAchievementCountValue;
+
 static void DisplayAchievementsBG(void)
 {
     if (!FlagGet(FLAG_ACHIEVEMENT_MENU_SE_DONE))
@@ -277,7 +278,8 @@ static void PrintGUIAchievementsNames(void)
 
     for (u8 i = 0; i < ACHIEVEMENTS_PER_PAGE && (startId + i) < *achievementCount; ++i)
     {
-        const u8 *name = FlagGet(FLAG_FIRST_ACHIEVEMENT + table[i].achievementIndex) ? table[startId + i].name : gText_None;
+        const struct AchievementEntry *entry = &table[startId + i];
+        const u8 *name = FlagGet(FLAG_FIRST_ACHIEVEMENT + entry->achievementIndex) ? entry->name : gText_None;
         WindowPrint(WIN_ACHIEVEMENTS_MEMORY_NAME, fontSize, 0, y, &sBlackText, 0, name);
         y += 16;
     }
@@ -294,6 +296,16 @@ static void PrintGUIAchievementsDescription(void)
     const struct AchievementEntry *table = sAchievementsTable;
 
     CleanWindow(WIN_ACHIEVEMENTS_MEMORY_DESC);
+    if (*achievementCount == 0)
+    {
+        WindowPrint(WIN_ACHIEVEMENTS_MEMORY_DESC, fontSize, x, y, &sBlackText, 0, gText_Desc_None);
+        CommitWindow(WIN_ACHIEVEMENTS_MEMORY_DESC);
+        return;
+    }
+
+    if (achievementId >= *achievementCount)
+        achievementId = *achievementCount - 1;
+
     const u8 *desc = FlagGet(FLAG_FIRST_ACHIEVEMENT + table[achievementId].achievementIndex) ? table[achievementId].desc : gText_Desc_None;
     WindowPrint(WIN_ACHIEVEMENTS_MEMORY_DESC, fontSize, x, y, &sBlackText, 0, desc);
     CommitWindow(WIN_ACHIEVEMENTS_MEMORY_DESC);
