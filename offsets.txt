@@ -11,7 +11,7 @@ CommitWindow:                     08900274
 EventScript_PalletTown_FatGuy:    08900000
 MainCB2_AchievementMenu:          08900164
 PrintGUIAchievementsDescription:  08900294
-PrintGUIAchievementsMemoryNames:  089002F4
+PrintGUIAchievementsNames:  089002F4
 ReloadStartMenu:                  08900D28
 ReloadStartMenuItems:             08900B5C
 SetUpStartMenu:                   08900C08

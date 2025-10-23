@@ -49,6 +49,8 @@ static void PrintGUIAchievementsItems(void);
 static void CreateAchievementMenuTrophySprite(void);
 static void DestroyAchievementMenuTrophySprite(void);
 
+// Total Achievement Count
+u8 *achievementCount = 10;
 
 // Defer copies: do 2 VBlanks per window to catch async printers finishing early
 static u8 sWinNeedsCopy[WIN_MAX_COUNT];
@@ -197,20 +199,6 @@ static const struct AchievementEntry sAchievementsTable[] =
     {9, gText_Achievement_10, gText_AchievementDesc_10},
 };
 
-static void InitAchievementMenuData()
-{
-    const struct AchievementEntry *table = sAchievementsTable;
-    u8 count = NELEMS(sAchievementsTable);
-
-    sAchievementMenuPtr->achievementCount = count;
-
-    for (u8 i = 0; i < count; i++)
-    {
-        u8 achievementIndex = table[i].achievementIndex;
-        sAchievementMenuPtr->unlocked[i] = FlagGet(FLAG_FIRST_ACHIEVEMENT + achievementIndex) ? TRUE : FALSE;
-    }
-}
-
 static void DisplayAchievementsBG(void)
 {
     if (!FlagGet(FLAG_ACHIEVEMENT_MENU_SE_DONE))
@@ -278,7 +266,7 @@ static void PrintGUIAchievementsHeader(void)
     CommitWindow(WIN_ACHIEVEMENTS_HEADER);
 }
 
-static void PrintGUIAchievementsMemoryNames(void)
+static void PrintGUIAchievementsNames(void)
 {
     u8 fontSize = 1; // Normal Text
     u8 y = 0;
@@ -287,9 +275,9 @@ static void PrintGUIAchievementsMemoryNames(void)
 
     CleanWindow(WIN_ACHIEVEMENTS_MEMORY_NAME);
 
-    for (u8 i = 0; i < ACHIEVEMENTS_PER_PAGE && (startId + i) < sAchievementMenuPtr->achievementCount; ++i)
+    for (u8 i = 0; i < ACHIEVEMENTS_PER_PAGE && (startId + i) < *achievementCount; ++i)
     {
-        const u8 *name = sAchievementMenuPtr->unlocked[startId + i] ? table[startId + i].name : gText_None;
+        const u8 *name = FlagGet(FLAG_FIRST_ACHIEVEMENT + table[i].achievementIndex) ? table[startId + i].name : gText_None;
         WindowPrint(WIN_ACHIEVEMENTS_MEMORY_NAME, fontSize, 0, y, &sBlackText, 0, name);
         y += 16;
     }
@@ -302,11 +290,11 @@ static void PrintGUIAchievementsDescription(void)
     u8 fontSize = 1;
     u8 x = 0;
     u8 y = 4;
-    u8 memoryId = sAchievementMenuPtr->selectedAchievement;
+    u8 achievementId = sAchievementMenuPtr->selectedAchievement;
     const struct AchievementEntry *table = sAchievementsTable;
 
     CleanWindow(WIN_ACHIEVEMENTS_MEMORY_DESC);
-    const u8 *desc = sAchievementMenuPtr->unlocked[memoryId] ? table[memoryId].desc : gText_Desc_None;
+    const u8 *desc = FlagGet(FLAG_FIRST_ACHIEVEMENT + table[achievementId].achievementIndex) ? table[achievementId].desc : gText_Desc_None;
     WindowPrint(WIN_ACHIEVEMENTS_MEMORY_DESC, fontSize, x, y, &sBlackText, 0, desc);
     CommitWindow(WIN_ACHIEVEMENTS_MEMORY_DESC);
 }
@@ -317,8 +305,8 @@ static void PrintGUIAchievementsMemoriesUnlocked(void)
     u8 unlocked = 0;
 
     // Count unlocked memories for the current page
-    for (u8 i = 0; i < sAchievementMenuPtr->achievementCount; ++i)
-        if (sAchievementMenuPtr->unlocked[i])
+    for (u8 i = 0; i < *achievementCount; ++i)
+        if (FlagGet(FLAG_FIRST_ACHIEVEMENT + sAchievementsTable[i].achievementIndex))
             unlocked++;
 
     CleanWindow(WIN_ACHIEVEMENTS_ACHIEVEMENTS_COUNT);
@@ -437,12 +425,12 @@ static void Task_AlbumWaitForKeyPress(u8 taskId)
 
     if (JOY_NEW_AND_REPEATED(DPAD_DOWN))
     {
-        if (sAchievementMenuPtr->selectedAchievement < sAchievementMenuPtr->achievementCount - 1)
+        if (sAchievementMenuPtr->selectedAchievement < *achievementCount - 1)
         {
             sAchievementMenuPtr->selectedAchievement++;
 
             if (sAchievementMenuPtr->selectedAchievementInMenu < ACHIEVEMENTS_PER_PAGE - 1 &&
-                sAchievementMenuPtr->selectedAchievementInMenu < sAchievementMenuPtr->achievementCount - 1)
+                sAchievementMenuPtr->selectedAchievementInMenu < *achievementCount - 1)
             {
                 sAchievementMenuPtr->selectedAchievementInMenu++;
             }
@@ -477,7 +465,7 @@ static void Task_AlbumWaitForKeyPress(u8 taskId)
         }
 
         if (redrawNames)
-            PrintGUIAchievementsMemoryNames();
+            PrintGUIAchievementsNames();
 
         PrintGUIAchievementsDescription();
         PlaySE(SE_SELECT);
@@ -506,7 +494,7 @@ static void Task_AlbumFadeIn(u8 taskId)
 static void PrintGUIAchievementsItems(void)
 {
     PrintGUIAchievementsHeader();
-    PrintGUIAchievementsMemoryNames();
+    PrintGUIAchievementsNames();
     PrintGUIAchievementsDescription();
     PrintGUIAchievementsMemoriesUnlocked();
 }
@@ -521,8 +509,6 @@ static void InitAchievementMenu(void)
     sAchievementMenuPtr->selectedAchievementInMenu = VarGet(VAR_ALBUM_SELECTED_MEMORY_IN_ALBUM);
     sAchievementMenuPtr->displayedStartId = sAchievementMenuPtr->selectedAchievement
                                           - sAchievementMenuPtr->selectedAchievementInMenu;
-
-    InitAchievementMenuData();
     PrintGUIAchievementsItems();
 }
 

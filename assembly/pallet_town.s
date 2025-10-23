@@ -16,10 +16,10 @@ EventScript_PalletTown_FatGuy:
     setflag 0x1601 @ Achievement 2
     setflag 0x1602 @ Achievement 3
     setflag 0x1603 @ Achievement 4
-    setflag 0x1604 @ Achievement 5
+    @setflag 0x1604 @ Achievement 5
     setflag 0x1605 @ Achievement 6
     setflag 0x1606 @ Achievement 7
-    setflag 0x1607 @ Achievement 8
+    @setflag 0x1607 @ Achievement 8
     setflag 0x1608 @ Achievement 9
     setflag 0x1609 @ Achievement 10
 

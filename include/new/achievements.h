@@ -5,7 +5,6 @@
 // Achievement Menu Memory Data
 #define sAchievementMenuPtr (*((struct AchievementMenu**) 0x203E038))
 
-#define ACHIEVEMENTS_COUNT 10
 #define BG_MAP_BYTES 0x800
 #define ACHIEVEMENTS_PER_PAGE 7
 
@@ -51,14 +50,10 @@ struct AchievementMenu
     // Image Data
     u16* bgMap;
 
-    // Achievement Data
-    bool8 unlocked[ACHIEVEMENTS_COUNT];
-
     // Tracker Data
     u8 selectedAchievement;
     u8 selectedAchievementInMenu; // Max of 7
     u8 displayedStartId; // Start ID for the displayed memories
-    u8 achievementCount;
 };
 
 struct AchievementEntry

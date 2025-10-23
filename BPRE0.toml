@@ -199,6 +199,12 @@ Format = '''[text<"">]27'''
 DefaultHash = '''A66C82FB'''
 
 [[NamedAnchors]]
+Name = '''data.achievements.table'''
+Address = 0x900F6C
+Format = '''[unused:|h unused2:|b description:pointer<[text<"">]1> text:pointer<[text<"">]1> index:|b]10 '''
+DefaultHash = '''1DCA3664'''
+
+[[NamedAnchors]]
 Name = '''data.menus.text.pcoptions'''
 Address = 0x4021E8
 Format = '''[text<""> code<>]3'''
