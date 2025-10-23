@@ -196,6 +196,8 @@ static const struct AchievementEntry sAchievementsTable[] =
     {9, gText_Achievement_10, gText_AchievementDesc_10},
 };
 
+const struct AchievementEntry *gAchievementsTable = sAchievementsTable;
+
 // Total Achievement Count
 static u8 sAchievementCountValue = ARRAY_COUNT(sAchievementsTable);
 u8 *achievementCount = &sAchievementCountValue;
@@ -272,7 +274,7 @@ static void PrintGUIAchievementsNames(void)
     u8 fontSize = 1; // Normal Text
     u8 y = 0;
     u8 startId = sAchievementMenuPtr->displayedStartId;
-    const struct AchievementEntry *table = sAchievementsTable;
+    const struct AchievementEntry *table = gAchievementsTable;
 
     CleanWindow(WIN_ACHIEVEMENTS_MEMORY_NAME);
 
@@ -293,7 +295,7 @@ static void PrintGUIAchievementsDescription(void)
     u8 x = 0;
     u8 y = 4;
     u8 achievementId = sAchievementMenuPtr->selectedAchievement;
-    const struct AchievementEntry *table = sAchievementsTable;
+    const struct AchievementEntry *table = gAchievementsTable;
 
     CleanWindow(WIN_ACHIEVEMENTS_MEMORY_DESC);
     if (*achievementCount == 0)
@@ -318,7 +320,7 @@ static void PrintGUIAchievementsMemoriesUnlocked(void)
 
     // Count unlocked memories for the current page
     for (u8 i = 0; i < *achievementCount; ++i)
-        if (FlagGet(FLAG_FIRST_ACHIEVEMENT + sAchievementsTable[i].achievementIndex))
+        if (FlagGet(FLAG_FIRST_ACHIEVEMENT + gAchievementsTable[i].achievementIndex))
             unlocked++;
 
     CleanWindow(WIN_ACHIEVEMENTS_ACHIEVEMENTS_COUNT);

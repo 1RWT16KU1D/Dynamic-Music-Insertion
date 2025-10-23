@@ -200,13 +200,13 @@ DefaultHash = '''A66C82FB'''
 
 [[NamedAnchors]]
 Name = '''data.achievements.table'''
-Address = 0x362D80
-Format = '''[index unused unused2:|h name<""> description<"">]11'''
+Address = 0x901604
+Format = '''[index unused unused2:|h name<""> description<"">]10'''
 DefaultHash = '''80464C98'''
 
 [[NamedAnchors]]
 Name = '''data.achievements.count'''
-Address = 0x90161C
+Address = 0x90160C
 Format = '''[count]1'''
 DefaultHash = '''BC6B83BD'''
 

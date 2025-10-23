@@ -63,6 +63,8 @@ struct AchievementEntry
     const u8 *desc;
 };
 
+extern const struct AchievementEntry *gAchievementsTable;
+
 /* ============= Color Data ============= */
 static const struct TextColor sWhiteText =
 {
