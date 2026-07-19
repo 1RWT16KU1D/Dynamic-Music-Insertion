@@ -37,7 +37,7 @@ if sys.platform.startswith('win'):
     LD = PATH + PREFIX + 'ld'
     GR = 'deps/grit.exe'
     WAV2AGB = 'deps/wav2agb.exe'
-    MID2AGB = 'deps/mid2agb.exe'
+    MID2AGB = ['deps/mid2agb.exe']
     OBJCOPY = PATH + PREFIX + 'objcopy'
 
 else:  # Linux, OSX, etc.
@@ -47,11 +47,11 @@ else:  # Linux, OSX, etc.
     LD = PREFIX + 'ld'
     if on_wsl:
         WAV2AGB = 'deps/wav2agb.exe'
-        MID2AGB = 'deps/mid2agb.exe'
+        MID2AGB = ['deps/mid2agb.exe']
         GR = "deps/grit.exe"
     else:
         WAV2AGB = 'wav2agb'
-        MID2AGB = 'mid2agb'
+        MID2AGB = ['wine', 'deps/mid2agb.exe']
         GR = "grit"
 
     OBJCOPY = PREFIX + 'objcopy'
@@ -101,7 +101,12 @@ class Master:
 def RunCommand(cmd: [str]):
     """Runs the command line command."""
     try:
-        subprocess.check_output(cmd)
+        env = None
+        if cmd[0] == 'wine':
+            env = os.environ.copy()
+            env['WINEDEBUG'] = '-all'
+
+        subprocess.check_output(cmd, env=env)
     except subprocess.CalledProcessError as e:
         try:
             print(e.output.decode(), file=sys.stderr)
@@ -182,11 +187,12 @@ def DoMiddleManAssembly(originalFile: str, assemblyFile: str, flagFile: str, fla
             for line in file:
                 counter += 1
                 if '_grp,' in line:
-                    lineToChange = line.split('voicegroup')[0]
+                    lineToChange = line.split(',', 1)[0] + ', '
                     break
 
-        if flags != [] and lineToChange != '' and '-G' in flags:
-            ChangeFileLine(assemblyFile, counter, lineToChange + flags[flags.index('-G') + 1] + '\n')
+        voicegroup = GetLegacyMid2AgbFlagValue(flags, '-G')
+        if flags != [] and lineToChange != '' and voicegroup is not None:
+            ChangeFileLine(assemblyFile, counter, lineToChange + FormatAssemblyValue(voicegroup) + '\n')
 
     regenerateObjectFile = func(assemblyFile)[1]
     if regenerateObjectFile is False:
@@ -308,6 +314,57 @@ def ProcessAudio(audioFile: str) -> str:
                                MakeOutputAudioFile, Master.printCompilingAudio, False)
 
 
+def GetLegacyMid2AgbFlagValue(flags: [str], option: str):
+    for i, flag in enumerate(flags):
+        if flag == option and i + 1 < len(flags):
+            return flags[i + 1]
+        if flag.startswith(option) and len(flag) > len(option):
+            return flag[len(option):]
+
+    return None
+
+
+def FormatAssemblyValue(value: str) -> str:
+    if value.lower().startswith('0x'):
+        return str(int(value, 16))
+
+    return value
+
+
+def NormalizeMid2AgbFlags(flags: [str]) -> [str]:
+    """Convert flag files to options accepted by Nintendo's mid2agb.exe."""
+    normalized = []
+    valueOptions = {
+        '-V': '-V',
+        '-m': '-V',
+        '-P': '-P',
+        '-p': '-P',
+        '-R': '-R',
+        '-r': '-R',
+    }
+    i = 0
+
+    while i < len(flags):
+        flag = flags[i]
+        option = flag[:2]
+
+        if flag in ('-G', '-g'):
+            i += 2
+        elif option in ('-G', '-g') and len(flag) > len(option):
+            i += 1
+        elif flag in valueOptions and i + 1 < len(flags):
+            normalized.append(valueOptions[flag] + flags[i + 1])
+            i += 2
+        elif option in valueOptions and len(flag) > len(option):
+            normalized.append(valueOptions[option] + flag[len(option):])
+            i += 1
+        else:
+            normalized.append(flag)
+            i += 1
+
+    return normalized
+
+
 def ProcessMusic(midiFile: str) -> str:
     """Compile audio."""
     assemblyFile = midiFile.split('.mid')[0] + '.s'
@@ -322,7 +379,7 @@ def ProcessMusic(midiFile: str) -> str:
     except FileNotFoundError:
         pass
 
-    cmd = [MID2AGB, midiFile, assemblyFile] + flags
+    cmd = MID2AGB + [midiFile, assemblyFile] + NormalizeMid2AgbFlags(flags)
 
     return DoMiddleManAssembly(midiFile, assemblyFile, flagFile, flags, cmd,
                                MakeOutputMusicFile, Master.printCompilingMusic, True)
